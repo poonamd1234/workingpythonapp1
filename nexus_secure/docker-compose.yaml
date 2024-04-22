@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+  nginx-nexushttps:
+    image: nginx-nexushttps
+    ports:
+      - '443:443'
+      - '6666:6666'
+    links:
+      - nexus-repo
+    command: [ nginx, '-g', 'daemon off;' ]
+
+  nexus-repo:
+    image: sonatype/nexus3
+    volumes:
+      - 'nexus3-data:/nexus-data-cont'
+
+volumes:
+  nexus3-data:

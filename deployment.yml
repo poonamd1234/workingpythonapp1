@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+
+kind: Deployment
+
+metadata:
+
+  name: chatbot-site
+
+  labels:
+
+    app: django-app-deployment   # This label is for the Deployment itself
+
+spec:
+
+  replicas: 2
+
+  selector:
+
+    matchLabels:
+
+      app: django-app    # This should match the labels in the template
+
+  template:
+
+    metadata:
+
+      labels:
+
+        app: django-app   # Labels for the pods created by the Deployment
+
+    spec:
+
+      containers:
+
+        - name: chatbot-cont
+
+          image: 991486635617.dkr.ecr.us-east-1.amazonaws.com/chatobott-img
+
+          ports:
+
+            - containerPort: 8000
+
+
+# Yes, that's correct. Ingress is commonly used when you have domain names and want to expose services based on hostnames, paths, or other HTTP request attributes. It provides a way to manage external access to services and route traffic based on various rules.
+
+# On the other hand, if you don't have specific domain names or don't need the advanced routing capabilities offered by Ingress, you can use Service to expose your application. A simple Service with type LoadBalancer or NodePort allows you to expose your application on a specified IP address or port without the need for hostnames or paths.
+
+# Here's a quick summary:
+
+# Service:
+
+# Suitable for basic cases where you want to expose your application on a specific IP address and port.
+# Useful when you don't have specific domain names or need advanced routing features.
+# Commonly used for internal services or simple deployments.
+# Ingress:
+
+# Suitable when you have multiple services and want to route traffic based on hostnames, paths, or other HTTP attributes.
+# Provides advanced routing capabilities and supports SSL termination, making it suitable for secure external access.
+# Often used for public-facing applications with multiple services.
