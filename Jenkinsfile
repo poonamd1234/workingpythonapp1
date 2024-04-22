@@ -19,5 +19,15 @@ pipeline {
                 git url:'https://github.com/poonamd1234/workingpythonapp1.git', branch: 'master'
             }
         }
+        stage("Build-img") {       
+             steps{
+                echo "Building the image"
+                sh "docker build -t newimg ."
+                
+            }
+        }
+
+
+
     }
 }
