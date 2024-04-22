@@ -23,7 +23,7 @@ pipeline {
         stage("Clone Code") {
             steps {
                 echo "Cloning the code"
-                git url:'git@github.com:poonamd1234/workingpythonapp1.git', branch: 'master'
+                git url:'https://github.com/poonamd1234/workingpythonapp1.git', branch: 'master'
             }
         }
     }
