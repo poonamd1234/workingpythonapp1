@@ -27,9 +27,16 @@ pipeline {
                 
             }
         }
+        
 
         stage("Push into ECR") { 
-            steps{
+             steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-poonam',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) 
                 sh "aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 637423608548.dkr.ecr.us-east-1.amazonaws.com"
                 sh "docker tag newimg:latest 637423608548.dkr.ecr.us-east-1.amazonaws.com/newimg:latest"
                 sh "docker push 637423608548.dkr.ecr.us-east-1.amazonaws.com/newimg:latest"
