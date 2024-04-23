@@ -21,6 +21,7 @@ pipeline {
         }
         stage("Build-img") {       
              steps{
+                 sh "whoami"
                 echo "Building the image"
                 sh "docker build -t newimg ."
                 
