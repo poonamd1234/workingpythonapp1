@@ -1,0 +1,65 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: chatbot-deployment
+  labels:
+    app: django-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: django-app
+  template:
+    metadata:
+      labels:
+        app: django-app
+    spec:
+      containers:
+        - name: chatbot-cont
+          imagePullPolicy: Always
+          image: 637423608548.dkr.ecr.us-east-1.amazonaws.com/my-ecs-repo:latest
+          ports:
+            - containerPort: 8000
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: chatbot-service
+spec:
+  selector:
+    app: django-app  
+  ports:
+    - protocol: TCP
+      port: 80  
+      targetPort: 8000
+
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: chatbot-ingress
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/healthcheck-protocol: HTTP
+    alb.ingress.kubernetes.io/healthcheck-path: "/"
+    alb.ingress.kubernetes.io/ssl-policy: ELBSecurityPolicy-TLS-1-1-2017-01
+    alb.ingress.kubernetes.io/subnets: subnet-0b17c6fca1c7f6c8a, subnet-0a51d3d0e345dc88e, subnet-041f0e3410fde6a3e
+    #alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:991486635617:certificate/c01d4019-4014-4213-a60e-b73031bcad94
+spec:
+  rules:
+    - host: "poonamshinde.world"
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: chatbot-service
+                port:
+                  number: 80
