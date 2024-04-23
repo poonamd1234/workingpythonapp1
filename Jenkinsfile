@@ -41,5 +41,17 @@ pipeline {
                 }
             }
         }
+        stage("Deploy to Kubernetes") { 
+            steps {
+                withCredentials([[
+                    $class: 'AmazonWebServicesCredentialsBinding',
+                    credentialsId: 'aws-poonam',
+                    accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                    secretKeyVariable: 'AWS_SECRET_ACCESS_KEY'
+                ]]) {
+                    sh "kubectl apply -f manifest.yaml"
+                }
+            }
+        }
     }
 }
